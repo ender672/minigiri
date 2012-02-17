@@ -1,17 +1,14 @@
 #include <libxml/parser.h>
 #include <libxml/xpathInternals.h>
 #include <ruby.h>
-#include <ruby/util.h>
 
 VALUE cNode, cNodeSet;
 
 struct doc_data {
     VALUE doc;
-    VALUE node_cache;
 };
 
 #define DOC_RUBY_OBJECT(x) (((struct doc_data *)(x->_private))->doc)
-#define DOC_NODE_CACHE(x) (((struct doc_data *)(x->_private))->node_cache)
 
 static void
 doc_dealloc(xmlDocPtr doc)
@@ -26,7 +23,7 @@ doc_read_memory(VALUE klass, VALUE string)
     const char *c_buffer;
     int len;
     xmlDocPtr doc;
-    VALUE rb_doc, cache;
+    VALUE rb_doc;
     struct doc_data *tuple;
     
     StringValue(string);
@@ -36,12 +33,8 @@ doc_read_memory(VALUE klass, VALUE string)
     doc = xmlReadMemory(c_buffer, len, NULL, NULL, XML_PARSE_RECOVER);
     rb_doc = Data_Wrap_Struct(klass, 0, doc_dealloc, doc);
 
-    cache = rb_ary_new();
-    rb_iv_set(rb_doc, "@node_cache", cache);
-
     tuple = (struct doc_data *)malloc(sizeof(struct doc_data));
     tuple->doc = rb_doc;
-    tuple->node_cache = cache;
     doc->_private = tuple;
 
     return rb_doc;
@@ -71,7 +64,7 @@ node_set_length(VALUE self)
 static VALUE
 node_set_index_at(VALUE self, VALUE rb_offset)
 {
-    VALUE node_cache, rb_node;
+    VALUE rb_node;
     xmlNodePtr node;
     xmlNodeSetPtr node_set;
     long offset = NUM2LONG(rb_offset);
@@ -83,9 +76,6 @@ node_set_index_at(VALUE self, VALUE rb_offset)
     
     node = node_set->nodeTab[offset];
     rb_node = Data_Wrap_Struct(cNode, node_mark, 0, node);
-
-    node_cache = DOC_NODE_CACHE(node->doc);
-    rb_ary_push(node_cache, rb_node);
 
     return rb_node;
 }
