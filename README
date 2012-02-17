@@ -1,0 +1,313 @@
+# This project demonstrates a crash in nokogiri.
+# Requires ruby 1.9.3-p0 or 1.9.3-p125.
+# It can take up to 10 minutes for the crash to occur.
+
+$ ruby extconf.rb
+$ make
+$ ruby -I. test.rb
+
+test.rb:15: [BUG] Segmentation fault
+ruby 1.9.3p125 (2012-02-16 revision 34643) [x86_64-linux]
+
+-- Control frame information -----------------------------------------------
+c:0048 p:---- s:0143 b:0143 l:000142 d:000142 CFUNC  :children
+c:0047 p:0012 s:0140 b:0140 l:000139 d:000139 METHOD test.rb:15
+c:0046 p:0012 s:0135 b:0135 l:0003b8 d:000134 BLOCK  test.rb:17
+c:0045 p:---- s:0132 b:0132 l:000131 d:000131 FINISH
+c:0044 p:---- s:0130 b:0130 l:0003d0 d:000129 IFUNC 
+c:0043 p:0015 s:0128 b:0127 l:000118 d:000126 BLOCK  test.rb:9
+c:0042 p:---- s:0124 b:0124 l:000123 d:000123 FINISH
+c:0041 p:---- s:0122 b:0122 l:000121 d:000121 CFUNC  :times
+c:0040 p:0017 s:0119 b:0119 l:000118 d:000118 METHOD test.rb:8
+c:0039 p:---- s:0115 b:0115 l:000114 d:000114 FINISH
+c:0038 p:---- s:0113 b:0113 l:0003d0 d:0003d0 CFUNC  :map
+c:0037 p:0024 s:0110 b:0110 l:0003b8 d:0003b8 METHOD test.rb:16
+c:0036 p:0012 s:0105 b:0105 l:000798 d:000104 BLOCK  test.rb:17
+c:0035 p:---- s:0102 b:0102 l:000101 d:000101 FINISH
+c:0034 p:---- s:0100 b:0100 l:001a20 d:000099 IFUNC 
+c:0033 p:0015 s:0098 b:0097 l:000088 d:000096 BLOCK  test.rb:9
+c:0032 p:---- s:0094 b:0094 l:000093 d:000093 FINISH
+c:0031 p:---- s:0092 b:0092 l:000091 d:000091 CFUNC  :times
+c:0030 p:0017 s:0089 b:0089 l:000088 d:000088 METHOD test.rb:8
+c:0029 p:---- s:0085 b:0085 l:000084 d:000084 FINISH
+c:0028 p:---- s:0083 b:0083 l:001a20 d:001a20 CFUNC  :map
+c:0027 p:0024 s:0080 b:0080 l:000798 d:000798 METHOD test.rb:16
+c:0026 p:0012 s:0075 b:0075 l:0021f8 d:000074 BLOCK  test.rb:17
+c:0025 p:---- s:0072 b:0072 l:000071 d:000071 FINISH
+c:0024 p:---- s:0070 b:0070 l:000320 d:000069 IFUNC 
+c:0023 p:0015 s:0068 b:0067 l:000058 d:000066 BLOCK  test.rb:9
+c:0022 p:---- s:0064 b:0064 l:000063 d:000063 FINISH
+c:0021 p:---- s:0062 b:0062 l:000061 d:000061 CFUNC  :times
+c:0020 p:0017 s:0059 b:0059 l:000058 d:000058 METHOD test.rb:8
+c:0019 p:---- s:0055 b:0055 l:000054 d:000054 FINISH
+c:0018 p:---- s:0053 b:0053 l:000320 d:000320 CFUNC  :map
+c:0017 p:0024 s:0050 b:0050 l:0021f8 d:0021f8 METHOD test.rb:16
+c:0016 p:0012 s:0045 b:0045 l:000328 d:000044 BLOCK  test.rb:17
+c:0015 p:---- s:0042 b:0042 l:000041 d:000041 FINISH
+c:0014 p:---- s:0040 b:0040 l:002420 d:000039 IFUNC 
+c:0013 p:0015 s:0038 b:0037 l:000028 d:000036 BLOCK  test.rb:9
+c:0012 p:---- s:0034 b:0034 l:000033 d:000033 FINISH
+c:0011 p:---- s:0032 b:0032 l:000031 d:000031 CFUNC  :times
+c:0010 p:0017 s:0029 b:0029 l:000028 d:000028 METHOD test.rb:8
+c:0009 p:---- s:0025 b:0025 l:000024 d:000024 FINISH
+c:0008 p:---- s:0023 b:0023 l:002420 d:002420 CFUNC  :map
+c:0007 p:0024 s:0020 b:0020 l:000328 d:000328 METHOD test.rb:16
+c:0006 p:0033 s:0015 b:0015 l:002288 d:000014 BLOCK  test.rb:23
+c:0005 p:---- s:0012 b:0012 l:000011 d:000011 FINISH
+c:0004 p:---- s:0010 b:0010 l:000009 d:000009 CFUNC  :loop
+c:0003 p:0068 s:0007 b:0007 l:002288 d:001d30 EVAL   test.rb:21
+c:0002 p:---- s:0004 b:0004 l:000003 d:000003 FINISH
+c:0001 p:0000 s:0002 b:0002 l:002288 d:002288 TOP   
+
+-- Ruby level backtrace information ----------------------------------------
+test.rb:21:in `<main>'
+test.rb:21:in `loop'
+test.rb:23:in `block in <main>'
+test.rb:16:in `inspect'
+test.rb:16:in `map'
+test.rb:8:in `each'
+test.rb:8:in `times'
+test.rb:9:in `block in each'
+test.rb:17:in `block in inspect'
+test.rb:16:in `inspect'
+test.rb:16:in `map'
+test.rb:8:in `each'
+test.rb:8:in `times'
+test.rb:9:in `block in each'
+test.rb:17:in `block in inspect'
+test.rb:16:in `inspect'
+test.rb:16:in `map'
+test.rb:8:in `each'
+test.rb:8:in `times'
+test.rb:9:in `block in each'
+test.rb:17:in `block in inspect'
+test.rb:16:in `inspect'
+test.rb:16:in `map'
+test.rb:8:in `each'
+test.rb:8:in `times'
+test.rb:9:in `block in each'
+test.rb:17:in `block in inspect'
+test.rb:15:in `inspect'
+test.rb:15:in `children'
+
+-- C level backtrace information -------------------------------------------
+ruby() [0x4e2c34]
+ruby() [0x51744d]
+ruby(rb_bug+0xb9) [0x5175eb]
+ruby() [0x48cb15]
+/lib/libpthread.so.0(+0xf8f0) [0x7f25e9db78f0]
+/home/tim/temp/minigiri_ii/minigiri.so(+0xf6e) [0x7f25e8b53f6e] minigiri.c:53
+ruby() [0x4204ec]
+ruby() [0x4207b5]
+ruby() [0x4201ab]
+ruby() [0x4209e4]
+ruby(rb_gc_mark_locations+0x20) [0x420a33]
+ruby() [0x4cf15a]
+ruby() [0x4204d3]
+ruby() [0x4207b5]
+ruby() [0x4201ab]
+ruby() [0x4209e4]
+ruby() [0x420a94]
+ruby() [0x420bdb]
+ruby() [0x420e44]
+ruby() [0x420f8d]
+ruby() [0x42102c]
+ruby(ruby_xmalloc+0x1a) [0x4210df]
+ruby(st_add_direct+0xe7) [0x494366]
+ruby(rb_ivar_set+0x369) [0x4bde57]
+ruby(rb_iv_set+0x2a) [0x4bded6]
+/home/tim/temp/minigiri_ii/minigiri.so(+0x10d7) [0x7f25e8b540d7] minigiri.c:116
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby(rb_yield_values2+0x2a5) [0x4e0114]
+ruby() [0x511318]
+ruby() [0x4d6832]
+ruby() [0x4da051]
+ruby(rb_yield+0x4b6) [0x4e0926]
+ruby() [0x43b76c]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby() [0x4dbb54]
+ruby() [0x4de9a1]
+ruby(rb_iterate+0xea) [0x4d0e84]
+ruby(rb_block_call+0x29) [0x4d1017]
+ruby() [0x510c86]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby(rb_yield_values2+0x2a5) [0x4e0114]
+ruby() [0x511318]
+ruby() [0x4d6832]
+ruby() [0x4da051]
+ruby(rb_yield+0x4b6) [0x4e0926]
+ruby() [0x43b76c]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby() [0x4dbb54]
+ruby() [0x4de9a1]
+ruby(rb_iterate+0xea) [0x4d0e84]
+ruby(rb_block_call+0x29) [0x4d1017]
+ruby() [0x510c86]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby(rb_yield_values2+0x2a5) [0x4e0114]
+ruby() [0x511318]
+ruby() [0x4d6832]
+ruby() [0x4da051]
+ruby(rb_yield+0x4b6) [0x4e0926]
+ruby() [0x43b76c]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby() [0x4dbb54]
+ruby() [0x4de9a1]
+ruby(rb_iterate+0xea) [0x4d0e84]
+ruby(rb_block_call+0x29) [0x4d1017]
+ruby() [0x510c86]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby(rb_yield_values2+0x2a5) [0x4e0114]
+ruby() [0x511318]
+ruby() [0x4d6832]
+ruby() [0x4da051]
+ruby(rb_yield+0x4b6) [0x4e0926]
+ruby() [0x43b76c]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby() [0x4dbb54]
+ruby() [0x4de9a1]
+ruby(rb_iterate+0xea) [0x4d0e84]
+ruby(rb_block_call+0x29) [0x4d1017]
+ruby() [0x510c86]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby() [0x4db4f8]
+ruby(rb_rescue2+0x96) [0x417d1f]
+ruby() [0x4d1078]
+ruby() [0x4cf9b7]
+ruby() [0x4d3312]
+ruby() [0x4d5d0b]
+ruby() [0x4da051]
+ruby(rb_iseq_eval_main+0xc4) [0x4da738]
+ruby() [0x418800]
+ruby(ruby_exec_node+0x1d) [0x418846]
+ruby(ruby_run_node+0x2e) [0x419c85]
+ruby() [0x417160]
+/lib/libc.so.6(__libc_start_main+0xfd) [0x7f25e917bc4d]
+ruby() [0x417059]
+
+-- Other runtime information -----------------------------------------------
+
+* Loaded script: test.rb
+
+* Loaded features:
+
+    0 enumerator.so
+    1 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/encdb.so
+    2 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/trans/transdb.so
+    3 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/site_ruby/1.9.1/rubygems/defaults.rb
+    4 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/rbconfig.rb
+    5 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/site_ruby/1.9.1/rubygems/deprecate.rb
+    6 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/site_ruby/1.9.1/rubygems/exceptions.rb
+    7 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb
+    8 /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/site_ruby/1.9.1/rubygems.rb
+    9 /home/tim/temp/minigiri_ii/minigiri.so
+
+* Process memory map:
+
+00400000-005bc000 r-xp 00000000 08:01 12594710                           /home/tim/.rbenv/versions/1.9.3-p125/bin/ruby
+007bb000-007bc000 r--p 001bb000 08:01 12594710                           /home/tim/.rbenv/versions/1.9.3-p125/bin/ruby
+007bc000-007be000 rw-p 001bc000 08:01 12594710                           /home/tim/.rbenv/versions/1.9.3-p125/bin/ruby
+007be000-007da000 rw-p 00000000 00:00 0 
+0137a000-01948000 rw-p 00000000 00:00 0                                  [heap]
+7f25e83d5000-7f25e83eb000 r-xp 00000000 08:01 9175119                    /lib/libgcc_s.so.1
+7f25e83eb000-7f25e85ea000 ---p 00016000 08:01 9175119                    /lib/libgcc_s.so.1
+7f25e85ea000-7f25e85eb000 r--p 00015000 08:01 9175119                    /lib/libgcc_s.so.1
+7f25e85eb000-7f25e85ec000 rw-p 00016000 08:01 9175119                    /lib/libgcc_s.so.1
+7f25e85ec000-7f25e8602000 r-xp 00000000 08:01 9175234                    /lib/libz.so.1.2.3.3
+7f25e8602000-7f25e8801000 ---p 00016000 08:01 9175234                    /lib/libz.so.1.2.3.3
+7f25e8801000-7f25e8802000 r--p 00015000 08:01 9175234                    /lib/libz.so.1.2.3.3
+7f25e8802000-7f25e8803000 rw-p 00016000 08:01 9175234                    /lib/libz.so.1.2.3.3
+7f25e8803000-7f25e8949000 r-xp 00000000 08:01 7866006                    /usr/lib/libxml2.so.2.7.6
+7f25e8949000-7f25e8b48000 ---p 00146000 08:01 7866006                    /usr/lib/libxml2.so.2.7.6
+7f25e8b48000-7f25e8b50000 r--p 00145000 08:01 7866006                    /usr/lib/libxml2.so.2.7.6
+7f25e8b50000-7f25e8b52000 rw-p 0014d000 08:01 7866006                    /usr/lib/libxml2.so.2.7.6
+7f25e8b52000-7f25e8b53000 rw-p 00000000 00:00 0 
+7f25e8b53000-7f25e8b55000 r-xp 00000000 08:01 7630866                    /home/tim/temp/minigiri_ii/minigiri.so
+7f25e8b55000-7f25e8d54000 ---p 00002000 08:01 7630866                    /home/tim/temp/minigiri_ii/minigiri.so
+7f25e8d54000-7f25e8d55000 r--p 00001000 08:01 7630866                    /home/tim/temp/minigiri_ii/minigiri.so
+7f25e8d55000-7f25e8d56000 rw-p 00002000 08:01 7630866                    /home/tim/temp/minigiri_ii/minigiri.so
+7f25e8d56000-7f25e8d58000 r-xp 00000000 08:01 14948711                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/trans/transdb.so
+7f25e8d58000-7f25e8f58000 ---p 00002000 08:01 14948711                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/trans/transdb.so
+7f25e8f58000-7f25e8f59000 r--p 00002000 08:01 14948711                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/trans/transdb.so
+7f25e8f59000-7f25e8f5a000 rw-p 00003000 08:01 14948711                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/trans/transdb.so
+7f25e8f5a000-7f25e8f5c000 r-xp 00000000 08:01 14948727                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/encdb.so
+7f25e8f5c000-7f25e915b000 ---p 00002000 08:01 14948727                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/encdb.so
+7f25e915b000-7f25e915c000 r--p 00001000 08:01 14948727                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/encdb.so
+7f25e915c000-7f25e915d000 rw-p 00002000 08:01 14948727                   /home/tim/.rbenv/versions/1.9.3-p125/lib/ruby/1.9.1/x86_64-linux/enc/encdb.so
+7f25e915d000-7f25e92d7000 r-xp 00000000 08:01 9179094                    /lib/libc-2.11.1.so
+7f25e92d7000-7f25e94d6000 ---p 0017a000 08:01 9179094                    /lib/libc-2.11.1.so
+7f25e94d6000-7f25e94da000 r--p 00179000 08:01 9179094                    /lib/libc-2.11.1.so
+7f25e94da000-7f25e94db000 rw-p 0017d000 08:01 9179094                    /lib/libc-2.11.1.so
+7f25e94db000-7f25e94e0000 rw-p 00000000 00:00 0 
+7f25e94e0000-7f25e9562000 r-xp 00000000 08:01 9179098                    /lib/libm-2.11.1.so
+7f25e9562000-7f25e9761000 ---p 00082000 08:01 9179098                    /lib/libm-2.11.1.so
+7f25e9761000-7f25e9762000 r--p 00081000 08:01 9179098                    /lib/libm-2.11.1.so
+7f25e9762000-7f25e9763000 rw-p 00082000 08:01 9179098                    /lib/libm-2.11.1.so
+7f25e9763000-7f25e976c000 r-xp 00000000 08:01 9179096                    /lib/libcrypt-2.11.1.so
+7f25e976c000-7f25e996c000 ---p 00009000 08:01 9179096                    /lib/libcrypt-2.11.1.so
+7f25e996c000-7f25e996d000 r--p 00009000 08:01 9179096                    /lib/libcrypt-2.11.1.so
+7f25e996d000-7f25e996e000 rw-p 0000a000 08:01 9179096                    /lib/libcrypt-2.11.1.so
+7f25e996e000-7f25e999c000 rw-p 00000000 00:00 0 
+7f25e999c000-7f25e999e000 r-xp 00000000 08:01 9179097                    /lib/libdl-2.11.1.so
+7f25e999e000-7f25e9b9e000 ---p 00002000 08:01 9179097                    /lib/libdl-2.11.1.so
+7f25e9b9e000-7f25e9b9f000 r--p 00002000 08:01 9179097                    /lib/libdl-2.11.1.so
+7f25e9b9f000-7f25e9ba0000 rw-p 00003000 08:01 9179097                    /lib/libdl-2.11.1.so
+7f25e9ba0000-7f25e9ba7000 r-xp 00000000 08:01 9179112                    /lib/librt-2.11.1.so
+7f25e9ba7000-7f25e9da6000 ---p 00007000 08:01 9179112                    /lib/librt-2.11.1.so
+7f25e9da6000-7f25e9da7000 r--p 00006000 08:01 9179112                    /lib/librt-2.11.1.so
+7f25e9da7000-7f25e9da8000 rw-p 00007000 08:01 9179112                    /lib/librt-2.11.1.so
+7f25e9da8000-7f25e9dc0000 r-xp 00000000 08:01 9179108                    /lib/libpthread-2.11.1.so
+7f25e9dc0000-7f25e9fbf000 ---p 00018000 08:01 9179108                    /lib/libpthread-2.11.1.so
+7f25e9fbf000-7f25e9fc0000 r--p 00017000 08:01 9179108                    /lib/libpthread-2.11.1.so
+7f25e9fc0000-7f25e9fc1000 rw-p 00018000 08:01 9179108                    /lib/libpthread-2.11.1.so
+7f25e9fc1000-7f25e9fc5000 rw-p 00000000 00:00 0 
+7f25e9fc5000-7f25e9fe5000 r-xp 00000000 08:01 9175061                    /lib/ld-2.11.1.so
+7f25ea07b000-7f25ea17c000 rw-p 00000000 00:00 0 
+7f25ea17c000-7f25ea1bb000 r--p 00000000 08:01 7872401                    /usr/lib/locale/en_US.utf8/LC_CTYPE
+7f25ea1bb000-7f25ea1c0000 rw-p 00000000 00:00 0 
+7f25ea1d6000-7f25ea1d7000 rw-p 00000000 00:00 0 
+7f25ea1d7000-7f25ea1d8000 ---p 00000000 00:00 0 
+7f25ea1d8000-7f25ea1db000 rw-p 00000000 00:00 0 
+7f25ea1db000-7f25ea1e2000 r--s 00000000 08:01 7873045                    /usr/lib/gconv/gconv-modules.cache
+7f25ea1e2000-7f25ea1e4000 rw-p 00000000 00:00 0 
+7f25ea1e4000-7f25ea1e5000 r--p 0001f000 08:01 9175061                    /lib/ld-2.11.1.so
+7f25ea1e5000-7f25ea1e6000 rw-p 00020000 08:01 9175061                    /lib/ld-2.11.1.so
+7f25ea1e6000-7f25ea1e7000 rw-p 00000000 00:00 0 
+7fff62034000-7fff62049000 rw-p 00000000 00:00 0                          [stack]
+7fff620f8000-7fff620f9000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+
+[NOTE]
+You may have encountered a bug in the Ruby interpreter or extension libraries.
+Bug reports are welcome.
+For details: http://www.ruby-lang.org/bugreport.html
+
+Aborted
