@@ -2,7 +2,7 @@ require "minigiri"
 
 buf = File.read 'sample.xml'
 
-class NodeSet
+class Node
   include Enumerable
   def each(&block)
     length.times do |x|
@@ -12,8 +12,7 @@ class NodeSet
 end
 
 def inspect node
-  set = node.children
-  set.map do |n|
+  node.map do |n|
     inspect n
   end
 end

@@ -1,9 +1,7 @@
 #include <libxml/parser.h>
-#include <libxml/xpathInternals.h>
 #include <ruby.h>
-#include <ruby/util.h>
 
-VALUE cNode, cNodeSet;
+VALUE cNode;
 
 struct doc_data {
     VALUE doc;
@@ -53,36 +51,38 @@ node_mark(xmlNodePtr node)
     rb_gc_mark(DOC_RUBY_OBJECT(node->doc));
 }
 
-static void
-node_set_deallocate(xmlNodeSetPtr node_set)
+static VALUE
+node_length(VALUE self)
 {
-    xmlFree(node_set->nodeTab);
-    xmlFree(node_set);
+    xmlNodePtr node;
+    long i=0;
+    Data_Get_Struct(self, xmlNode, node);
+    node = node->children;
+    while (node) {
+	i++;
+	node = node->next;
+    }
+    return INT2NUM(i);
 }
 
 static VALUE
-node_set_length(VALUE self)
-{
-    xmlNodeSetPtr node_set;
-    Data_Get_Struct(self, xmlNodeSet, node_set);
-    return INT2NUM(node_set->nodeNr);
-}
-
-static VALUE
-node_set_index_at(VALUE self, VALUE rb_offset)
+node_index_at(VALUE self, VALUE rb_offset)
 {
     VALUE node_cache, rb_node;
-    xmlNodePtr node;
-    xmlNodeSetPtr node_set;
-    long offset = NUM2LONG(rb_offset);
+    xmlNodePtr node, new_node;
+    long i, offset = NUM2LONG(rb_offset);
 
-    Data_Get_Struct(self, xmlNodeSet, node_set);
+    Data_Get_Struct(self, xmlNode, node);
 
-    if (offset >= node_set->nodeNr || offset < 0)
-	return Qnil;
-    
-    node = node_set->nodeTab[offset];
-    rb_node = Data_Wrap_Struct(cNode, node_mark, 0, node);
+    new_node = node->children;
+    if (!new_node) return Qnil;
+
+    for (i=0; i<offset; i++) {
+	new_node = new_node->next;
+	if (!new_node) return Qnil;
+    }
+
+    rb_node = Data_Wrap_Struct(cNode, node_mark, 0, new_node);
 
     node_cache = DOC_NODE_CACHE(node->doc);
     rb_ary_push(node_cache, rb_node);
@@ -90,46 +90,16 @@ node_set_index_at(VALUE self, VALUE rb_offset)
     return rb_node;
 }
 
-static VALUE
-node_children(VALUE self)
-{
-    xmlNodePtr node, child;
-    xmlNodeSetPtr set;
-    VALUE document, rb_set;
-
-    Data_Get_Struct(self, xmlNode, node);
-
-    child = node->children;
-    set = xmlXPathNodeSetCreate(child);
-
-    document = DOC_RUBY_OBJECT(node->doc);
-
-    if (child)
-	child = child->next;
-    
-    while(child) {
-	xmlXPathNodeSetAddUnique(set, child);
-	child = child->next;
-    }
-
-    rb_set = Data_Wrap_Struct(cNodeSet, 0, node_set_deallocate, set);
-    rb_iv_set(rb_set, "@document", document);
-
-    return rb_set;
-}
-
 void
 Init_minigiri()
 {
     cNode = rb_define_class("Node", rb_cObject);
-    rb_define_method(cNode, "children", node_children, 0);  
+    rb_define_method(cNode, "length", node_length, 0);
+    rb_define_method(cNode, "[]", node_index_at, 1);
 
     VALUE cDocument = rb_define_class("Document", cNode);
     rb_define_singleton_method(cDocument, "read_memory", doc_read_memory, 1);
 
-    cNodeSet = rb_define_class("NodeSet", rb_cObject);
-    rb_define_method(cNodeSet, "length", node_set_length, 0);
-    rb_define_method(cNodeSet, "[]", node_set_index_at, 1);
-
     xmlInitParser();  
 }
+
